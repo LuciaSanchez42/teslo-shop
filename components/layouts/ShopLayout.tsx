@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { FunctionComponent, ReactNode } from 'react'
+import { Navbar } from '../custom'
 
 interface Props {
   children: ReactNode
@@ -17,8 +18,10 @@ const ShopLayout: FunctionComponent<Props> = ({ children, title, pageDescription
         <meta name='og:description' content={pageDescription} />
         {imageUrl && <meta name='og:image' content={imageUrl} />}
       </Head>
-      <nav>{/* TODO: navbar */}</nav>
-      {/* TODO: sidebar */}
+      <nav>
+        <Navbar />
+      </nav>
+      {/* TODO sidebar */}
       <main
         style={{
           margin: '80px auto',
