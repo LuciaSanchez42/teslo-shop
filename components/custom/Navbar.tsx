@@ -1,8 +1,9 @@
 import { AppBar, Badge, Box, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import NextLink from 'next/link'
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import { FunctionComponent } from 'react'
 
-const Navbar = () => {
+const Navbar: FunctionComponent = () => {
   return (
     <AppBar>
       <Toolbar>
