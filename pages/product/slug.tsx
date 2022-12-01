@@ -1,7 +1,7 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { ItemCounter } from '../../components/custom'
 import { ShopLayout } from '../../components/layouts'
-import { ProductSlide } from '../../components/products'
+import { ProductSlide, SideSelector } from '../../components/products'
 
 import { initialData } from '../../database/products'
 
@@ -25,6 +25,7 @@ const ProductPage = () => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter count={4} />
+              <SideSelector sizeSelected={product.sizes[0]} sizes={product.sizes} />
             </Box>
             <Button color='secondary' className='circular-btn'>
               Agregar al carrito
