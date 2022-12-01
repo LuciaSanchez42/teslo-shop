@@ -5,7 +5,11 @@ import NextLink from 'next/link'
 import { ItemCounter } from '../custom'
 
 const productInCard = [initialData.products[0], initialData.products[1], initialData.products[2]]
-const CartList: FC = () => {
+interface Props {
+  editable?: boolean
+}
+
+const CartList: FC<Props> = ({ editable }) => {
   return (
     <>
       {productInCard.map((product) => {
@@ -23,15 +27,18 @@ const CartList: FC = () => {
                 <Typography variant='body1'>{product.title}</Typography>
                 <Typography variant='body1'>
                   Talla: <strong>M</strong>
-                  <ItemCounter />
                 </Typography>
+                {editable ? <ItemCounter /> : <Typography variant='h5'>3 items</Typography>}
+                <ItemCounter />
               </Box>
             </Grid>
             <Grid item xs={2} display='flex' alignItems={'center'} flexDirection='column'>
               <Typography variant='subtitle1'>${product.price}</Typography>
-              <Button variant='text' color='secondary'>
-                Eliminar
-              </Button>
+              {editable && (
+                <Button variant='text' color='secondary'>
+                  Eliminar
+                </Button>
+              )}
             </Grid>
           </Grid>
         )
