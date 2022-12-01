@@ -3,9 +3,9 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { FC } from 'react'
 
 interface Props {
-  count: number
+  count?: number
 }
-const ItemCounter: FC<Props> = ({ count }) => {
+const ItemCounter: FC<Props> = ({ count = 1 }) => {
   return (
     <Box display={'flex'} alignItems='center'>
       <IconButton>
