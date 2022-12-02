@@ -18,7 +18,7 @@ const CartList: FC<Props> = ({ editable }) => {
             <Grid item xs={3}>
               <NextLink href={'product/slug'}>
                 <CardActionArea>
-                  <CardMedia image={`products/${product.images[0]}`} component='img' sx={{ borderRadius: '5px' }} />
+                  <CardMedia image={`/products/${product.images[0]}`} component='img' sx={{ borderRadius: '5px' }} />
                 </CardActionArea>
               </NextLink>
             </Grid>
@@ -29,7 +29,6 @@ const CartList: FC<Props> = ({ editable }) => {
                   Talla: <strong>M</strong>
                 </Typography>
                 {editable ? <ItemCounter /> : <Typography variant='h5'>3 items</Typography>}
-                <ItemCounter />
               </Box>
             </Grid>
             <Grid item xs={2} display='flex' alignItems={'center'} flexDirection='column'>
