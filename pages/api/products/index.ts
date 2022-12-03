@@ -15,9 +15,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       res.status(405).json({ message: 'Method not allowed' })
   }
 }
-const getProduct = async (_req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const { gender = 'all' } = req.query
+  let condition = {}
+  if (gender !== 'all' && ['men', 'women', 'kid', 'unisex'].includes(gender)) {
+    condition = { gender }
+  }
   await db.connect()
-  const products = await Product.find({})
+  const products = await Product.find(condition)
     .select('title price images inStock slug -_id')
     .lean<LeanDocument<IProduct[]>>()
   await db.disconnect()
