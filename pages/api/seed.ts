@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { initScriptLoader } from 'next/script'
 import { db } from '../../database'
 import { initialData } from '../../database/products'
 import { Product } from '../../models'
