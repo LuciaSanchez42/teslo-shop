@@ -1,4 +1,4 @@
-export interface SeedProduct {
+interface SeedProduct {
   description: string
   images: string[]
   inStock: number

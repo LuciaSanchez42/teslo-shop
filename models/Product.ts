@@ -1,7 +1,7 @@
 import mongoose, { model, Model, Schema } from 'mongoose'
-import { SeedProduct } from '../database/products'
+import { IProduct } from '../ts'
 
-const ProductSchema = new Schema<SeedProduct>(
+const ProductSchema = new Schema<IProduct>(
   {
     description: {
       type: String,
