@@ -62,5 +62,6 @@ const ProductSchema = new Schema<IProduct>(
     timestamps: true
   }
 )
+ProductSchema.index({ title: 'text', tags: 'text' })
 const Product = mongoose.models.Product || model('Product', ProductSchema)
 export default Product

@@ -7,7 +7,7 @@ import { IProduct } from '../../../ts'
 interface Data {
   products: IProduct[]
 }
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case 'GET':
       return getProduct(req, res)
@@ -15,10 +15,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       res.status(405).json({ message: 'Method not allowed' })
   }
 }
-const getProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getProduct = async (req: NextApiRequest, res: NextApiResponse<IProduct[]>) => {
   const { gender = 'all' } = req.query
   let condition = {}
-  if (gender !== 'all' && ['men', 'women', 'kid', 'unisex'].includes(gender)) {
+  if (gender !== 'all' && ['men', 'women', 'kid', 'unisex'].includes(gender.toString())) {
     condition = { gender }
   }
   await db.connect()
