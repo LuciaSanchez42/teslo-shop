@@ -10,7 +10,7 @@ const ProductCard: FC<Props> = ({ product }) => {
   const [hover, setHover] = useState(false)
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const productImage = useMemo(() => {
-    return hover ? `products/${product.images[1]}` : `products/${product.images[0]}`
+    return hover ? `/products/${product.images[1]}` : `/products/${product.images[0]}`
   }, [hover])
 
   return (
@@ -23,7 +23,7 @@ const ProductCard: FC<Props> = ({ product }) => {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       <Card>
-        <NextLink href={'/products/slug'} prefetch={false}>
+        <NextLink href={'/product/slug'} prefetch={false}>
           <CardActionArea>
             <CardMedia
               component={'img'}
