@@ -1,12 +1,13 @@
 import { AppBar, Badge, Box, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import NextLink from 'next/link'
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 import { useRouter } from 'next/router'
+import { UiContext } from '../../context'
 
 const Navbar: FunctionComponent = () => {
   const { asPath } = useRouter()
-
+  const { toggleMenu } = useContext(UiContext)
   return (
     <AppBar>
       <Toolbar>
@@ -45,7 +46,7 @@ const Navbar: FunctionComponent = () => {
             </Badge>
           </IconButton>
         </NextLink>
-        <Button variant='contained' sx={{ ml: 2 }}>
+        <Button variant='contained' sx={{ ml: 2 }} onClick={toggleMenu}>
           Menu
         </Button>
       </Toolbar>
