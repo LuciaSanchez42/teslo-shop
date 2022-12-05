@@ -23,7 +23,7 @@ const ProductCard: FC<Props> = ({ product }) => {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       <Card>
-        <NextLink href={'/product/slug'} prefetch={false}>
+        <NextLink href={`/product/${product.slug}`} prefetch={false}>
           <CardActionArea>
             <CardMedia
               component={'img'}

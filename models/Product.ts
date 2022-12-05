@@ -1,4 +1,4 @@
-import mongoose, { model, Model, Schema } from 'mongoose'
+import mongoose, { model, Schema } from 'mongoose'
 import { IProduct } from '../ts'
 
 const ProductSchema = new Schema<IProduct>(
