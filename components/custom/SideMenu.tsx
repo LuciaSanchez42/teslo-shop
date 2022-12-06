@@ -24,11 +24,17 @@ import {
   ListSubheader
 } from '@mui/material'
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { UiContext } from '../../context'
 
 const SideMenu = () => {
   const { isMenuOpen, toggleMenu } = useContext(UiContext)
+  const [search, setSearch] = useState<string>('')
+  const onSearchChange = () => {
+    if (search.trim().length > 0) {
+      navigateTo(`/search/${search.trim()}`)
+    }
+  }
   const router = useRouter()
   const navigateTo = (path: string) => {
     toggleMenu()
@@ -44,11 +50,14 @@ const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyUp={(e) => e.key === 'Enter' && onSearchChange()}
               type='text'
               placeholder='Buscar...'
               endAdornment={
                 <InputAdornment position='end'>
-                  <IconButton aria-label='toggle password visibility'>
+                  <IconButton aria-label='toggle password visibility' onClick={onSearchChange}>
                     <SearchOutlined />
                   </IconButton>
                 </InputAdornment>
