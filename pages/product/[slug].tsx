@@ -1,15 +1,19 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
-import { GetServerSideProps, NextPage } from 'next'
-import { redirect } from 'next/dist/server/api-utils'
-import { ItemCounter } from '../../components/custom'
-import { ShopLayout } from '../../components/layouts'
-import { ProductSlide, SideSelector } from '../../components/products'
-import { dbProductBySlug } from '../../database'
-import { IProduct } from '../../ts'
+import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextPage,
+} from "next";
+import { ItemCounter } from "../../components/custom";
+import { ShopLayout } from "../../components/layouts";
+import { ProductSlide, SideSelector } from "../../components/products";
+import { dbProductBySlug, getAllProductsSlugs } from "../../database";
+import { IProduct } from "../../ts";
 
 // const product = initialData.products[0]
 interface Props {
-  product: IProduct
+  product: IProduct;
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
@@ -20,49 +24,82 @@ const ProductPage: NextPage<Props> = ({ product }) => {
           <ProductSlide images={product.images} />
         </Grid>
         <Grid item xs={12} sm={5}>
-          <Box display='flex' flexDirection='column'>
-            <Typography variant='h1' component={'h1'}>
+          <Box display="flex" flexDirection="column">
+            <Typography variant="h1" component={"h1"}>
               {product.title}
             </Typography>
-            <Typography variant='subtitle1' component={'h1'}>
+            <Typography variant="subtitle1" component={"h1"}>
               ${product.price}
             </Typography>
             <Box sx={{ my: 2 }}>
-              <Typography variant='subtitle2'>Cantidad</Typography>
+              <Typography variant="subtitle2">Cantidad</Typography>
               <ItemCounter count={4} />
-              <SideSelector sizeSelected={product.sizes[0]} sizes={product.sizes} />
+              <SideSelector
+                sizeSelected={product.sizes[0]}
+                sizes={product.sizes}
+              />
             </Box>
-            <Button color='secondary' className='circular-btn'>
+            <Button color="secondary" className="circular-btn">
               Agregar al carrito
             </Button>
             {/* <Chip label='No Hay Disponibles' color='error' variant='outlined' /> */}
             <Box sx={{ mt: 3 }}>
-              <Typography variant='subtitle2'>Descripción</Typography>
-              <Typography variant='body2'>{product.description}</Typography>
+              <Typography variant="subtitle2">Descripción</Typography>
+              <Typography variant="body2">{product.description}</Typography>
             </Box>
           </Box>
         </Grid>
       </Grid>
     </ShopLayout>
-  )
-}
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { slug = '' } = context.params as { slug: string }
-  console.log(slug)
-  const product = await dbProductBySlug(slug)
+  );
+};
+// ? no usar getServerSideProps en esta pagina
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { slug = '' } = context.params as { slug: string }
+//   const product = await dbProductBySlug(slug)
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+//       product
+//     }
+//   }
+// }
+export const getStaticPaths: GetStaticPaths = async () => {
+  const productSlugs = await getAllProductsSlugs();
+  const Slugs = productSlugs.map((product) => ({
+    params: { slug: product.slug },
+  }));
+  return {
+    paths: Slugs,
+    fallback: "blocking",
+  };
+};
+// incremental static regeneration
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { slug = "" } = context.params as { slug: string };
+  const product = await dbProductBySlug(slug);
   if (!product) {
     return {
       redirect: {
-        destination: '/',
-        permanent: false
-      }
-    }
+        destination: "/",
+        permanent: false,
+      },
+    };
   }
 
   return {
     props: {
-      product
-    }
-  }
-}
-export default ProductPage
+      product,
+    },
+    revalidate: 60 * 60 * 24, // 24 hours
+  };
+};
+export default ProductPage;

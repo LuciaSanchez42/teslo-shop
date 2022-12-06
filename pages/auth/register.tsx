@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, TextField, Button } from '@mui/material'
-import { NextPage } from 'next'
 import { AuthLayout } from '../../components/layouts'
 import NextLink from 'next/link'
+import { NextPage } from 'next'
 
 const RegisterPage: NextPage = () => {
   return (
