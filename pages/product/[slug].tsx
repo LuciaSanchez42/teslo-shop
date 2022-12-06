@@ -1,10 +1,9 @@
 import { Box, Button, Grid, Typography } from '@mui/material'
-import { GetServerSideProps, NextPage } from 'next'
-import { redirect } from 'next/dist/server/api-utils'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { ItemCounter } from '../../components/custom'
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlide, SideSelector } from '../../components/products'
-import { dbProductBySlug } from '../../database'
+import { dbProductBySlug, getAllProductsSlugs } from '../../database'
 import { IProduct } from '../../ts'
 
 // const product = initialData.products[0]
@@ -46,9 +45,38 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     </ShopLayout>
   )
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
+// ? no usar getStaticProps en esta pagina
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { slug = '' } = context.params as { slug: string }
+//   const product = await dbProductBySlug(slug)
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+//       product
+//     }
+//   }
+// }
+export const getStaticPaths: GetStaticPaths = async () => {
+  const productSlugs = await getAllProductsSlugs()
+  const Slugs = productSlugs.map((product) => ({
+    params: { slug: product.slug }
+  }))
+  return {
+    paths: Slugs,
+    fallback: 'blocking'
+  }
+}
+// incremental static regeneration
+export const getStaticProps: GetStaticProps = async (context) => {
   const { slug = '' } = context.params as { slug: string }
-  console.log(slug)
   const product = await dbProductBySlug(slug)
   if (!product) {
     return {
@@ -62,7 +90,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       product
-    }
+    },
+    revalidate: 60 * 60 * 24 // 24 hours
   }
 }
 export default ProductPage

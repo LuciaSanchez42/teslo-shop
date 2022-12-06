@@ -15,7 +15,7 @@ const ProductPage = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(405).end()
   }
 }
-const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse) => {
   await db.connect()
   const { slug } = req.query
   const product = await Product.findOne({ slug }).lean<LeanDocument<IProduct>>()

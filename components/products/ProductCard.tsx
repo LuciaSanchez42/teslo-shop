@@ -11,7 +11,7 @@ const ProductCard: FC<Props> = ({ product }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
   const productImage = useMemo(() => {
     return hover ? `/products/${product.images[1]}` : `/products/${product.images[0]}`
-  }, [hover])
+  }, [hover, product.images])
 
   return (
     <Grid
