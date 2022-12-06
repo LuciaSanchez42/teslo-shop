@@ -19,3 +19,14 @@ export const getAllProductsSlugs = async (): Promise<ProductSlug[]> => {
   await db.disconnect()
   return slugs
 }
+export const getProductbyTerm = async (term: string): Promise<IProduct[]> => {
+  term = term.trim().toLocaleLowerCase()
+  await db.connect()
+  const products = await Product.find({
+    $text: { $search: term }
+  })
+    .select('title images price inStock slug -_id')
+    .lean<LeanDocument<IProduct[]>>()
+  await db.disconnect()
+  return products
+}

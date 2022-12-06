@@ -1,12 +1,15 @@
 import { Typography } from '@mui/material'
-import { NextPage } from 'next'
-import { Loading } from '../../components/custom'
+import { GetServerSideProps, NextPage } from 'next'
 import { ShopLayout } from '../../components/layouts'
 import ProductList from '../../components/products/ProductList'
-import { useProducts } from '../../hooks'
+import { getProductbyTerm } from '../../database'
+import { IProduct } from '../../ts'
 
-const SearchPage: NextPage = () => {
-  const { products, isLoading } = useProducts('/products')
+interface Props {
+  products: IProduct[]
+}
+
+const SearchPage: NextPage<Props> = ({ products }) => {
   return (
     <ShopLayout title='Teslo shop - Search' pageDescription='encuentra los mejores productos'>
       <Typography variant='h1' component={'h1'}>
@@ -15,8 +18,26 @@ const SearchPage: NextPage = () => {
       <Typography variant='h2' sx={{ mb: 1 }}>
         ABC -- 123
       </Typography>
-      {isLoading ? <Loading /> : <ProductList products={products} />}
+      <ProductList products={products} />
     </ShopLayout>
   )
+}
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query = '' } = context.params as { query: string }
+  if (query.length === 0) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true
+      }
+    }
+  }
+  let products = await getProductbyTerm(query)
+  // TODO: return others products
+  return {
+    props: {
+      products
+    }
+  }
 }
 export default SearchPage
