@@ -16,3 +16,13 @@ export interface IProduct {
 
 export type ISize = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
 export type ITypes = 'shirts' | 'pants' | 'hoodies' | 'hats'
+export interface CartItem {
+  _id: string
+  image: string
+  price: number
+  size: ISize
+  slug: string
+  title: string
+  gender: 'men' | 'women' | 'kid' | 'unisex'
+  quantity: number
+}

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { ItemCounter } from '../../components/custom'
 import { ShopLayout } from '../../components/layouts'
@@ -6,7 +6,6 @@ import { ProductSlide, SideSelector } from '../../components/products'
 import { dbProductBySlug, getAllProductsSlugs } from '../../database'
 import { IProduct } from '../../ts'
 
-// const product = initialData.products[0]
 interface Props {
   product: IProduct
 }
@@ -31,10 +30,13 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               <ItemCounter count={4} />
               <SideSelector sizeSelected={product.sizes[0]} sizes={product.sizes} />
             </Box>
-            <Button color='secondary' className='circular-btn'>
-              Agregar al carrito
-            </Button>
-            {/* <Chip label='No Hay Disponibles' color='error' variant='outlined' /> */}
+            {product.inStock > 0 ? (
+              <Button color='secondary' className='circular-btn'>
+                Agregar al carrito
+              </Button>
+            ) : (
+              <Chip label='No Hay Disponibles' color='error' variant='outlined' />
+            )}
             <Box sx={{ mt: 3 }}>
               <Typography variant='subtitle2'>Descripción</Typography>
               <Typography variant='body2'>{product.description}</Typography>

@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Typography } from '@mui/material'
 import { FC, useMemo, useState } from 'react'
 import { IProduct } from '../../ts'
 import NextLink from 'next/link'
@@ -25,6 +25,14 @@ const ProductCard: FC<Props> = ({ product }) => {
       <Card>
         <NextLink href={`/product/${product.slug}`} prefetch={false}>
           <CardActionArea>
+            {product.inStock === 0 && (
+              <Chip
+                color='primary'
+                label='No Hay Disponibles'
+                sx={{ position: 'absolute', zIndex: 99, top: '10px', left: '10px' }}
+              />
+            )}
+
             <CardMedia
               component={'img'}
               image={productImage}
