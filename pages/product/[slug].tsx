@@ -1,16 +1,30 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { useState } from 'react'
 import { ItemCounter } from '../../components/custom'
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlide, SideSelector } from '../../components/products'
 import { dbProductBySlug, getAllProductsSlugs } from '../../database'
-import { IProduct } from '../../ts'
+import { CartItem, IProduct, ISize } from '../../ts'
 
 interface Props {
   product: IProduct
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+  const [tempCartProduct, setTempCartProduct] = useState<CartItem>({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1
+  })
+  const selectedSize = (size: ISize) => {
+    setTempCartProduct({ ...tempCartProduct, size })
+  }
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -28,11 +42,15 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter count={4} />
-              <SideSelector sizeSelected={product.sizes[0]} sizes={product.sizes} />
+              <SideSelector sizeSelected={tempCartProduct.size} sizes={product.sizes} onSizeSelected={selectedSize} />
             </Box>
             {product.inStock > 0 ? (
               <Button color='secondary' className='circular-btn'>
-                Agregar al carrito
+                {tempCartProduct.size ? (
+                  <Typography variant='body1'>Agregar al Carrito</Typography>
+                ) : (
+                  <Typography variant='body1'>Selecciona un Tamaño</Typography>
+                )}
               </Button>
             ) : (
               <Chip label='No Hay Disponibles' color='error' variant='outlined' />
