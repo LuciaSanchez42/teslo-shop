@@ -30,3 +30,10 @@ export const getProductbyTerm = async (term: string): Promise<IProduct[]> => {
   await db.disconnect()
   return products
 }
+
+export const gellAllProducts = async (): Promise<IProduct[]> => {
+  await db.connect()
+  const products = await Product.find().lean<LeanDocument<IProduct[]>>()
+  await db.disconnect()
+  return JSON.parse(JSON.stringify(products))
+}
