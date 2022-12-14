@@ -1,9 +1,11 @@
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useContext, useState } from 'react'
 import { ItemCounter } from '../../components/custom'
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlide, SideSelector } from '../../components/products'
+import { CartContext } from '../../context'
 import { dbProductBySlug, getAllProductsSlugs } from '../../database'
 import { CartItem, IProduct, ISize } from '../../ts'
 
@@ -12,6 +14,8 @@ interface Props {
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+  const router = useRouter()
+  const { addToCart } = useContext(CartContext)
   const [tempCartProduct, setTempCartProduct] = useState<CartItem>({
     _id: product._id,
     image: product.images[0],
@@ -27,6 +31,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   }
   const onUpdatedQuantity = (quantity: number) => {
     setTempCartProduct({ ...tempCartProduct, quantity })
+  }
+  const onAddToCart = () => {
+    if (!tempCartProduct.size) return
+    addToCart(tempCartProduct)
+    router.push('/cart')
   }
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
@@ -52,7 +61,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
               <SideSelector sizeSelected={tempCartProduct.size} sizes={product.sizes} onSizeSelected={selectedSize} />
             </Box>
             {product.inStock > 0 ? (
-              <Button color='secondary' className='circular-btn'>
+              <Button color='secondary' className='circular-btn' onClick={onAddToCart}>
                 {tempCartProduct.size ? (
                   <Typography variant='body1'>Agregar al Carrito</Typography>
                 ) : (

@@ -3,7 +3,7 @@ import { CartItem } from '../../ts'
 
 interface ContextProps {
   cart: CartItem[]
-  // addToCart: (item: CartItem) => void
+  addToCart: (item: CartItem) => void
   // removeFromCart: (id: string) => void
   // clearCart: () => void
 }
